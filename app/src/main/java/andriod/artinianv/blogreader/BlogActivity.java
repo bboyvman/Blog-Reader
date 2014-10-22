@@ -4,7 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.ProgressBar;
+import android.widge
+t.ProgressBar;
 
 
 public class BlogActivity extends Activity {
@@ -32,6 +33,8 @@ public class BlogActivity extends Activity {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, arrayStrings);
         listView.setAdapter(adapter);
+
+        new BlogPostTask() .execute();
     }
 
 }
