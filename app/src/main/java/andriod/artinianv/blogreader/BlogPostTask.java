@@ -1,12 +1,14 @@
 package andriod.artinianv.blogreader;
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URL;
 
 public class BlogPostTask extends AsyncTask<Activity, Void, JSONObject> {
     @Override
