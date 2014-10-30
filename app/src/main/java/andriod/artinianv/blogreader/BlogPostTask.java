@@ -31,6 +31,13 @@ public class BlogPostTask extends AsyncTask<Activity, Void, JSONObject> {
             catch(IOException error) {
                 Log.e("BlogPostTask", "IO Exception : " + error);
             }
-            return null;
+            return jsonObject;
     }
+
+
+    @Override
+    protected void onPostExecute(JSONObject jsonObject) {
+        super.onPostExecute(jsonObject);
+    }
+}
 }
