@@ -3,6 +3,7 @@ package andriod.artinianv.blogreader;
 import android.text.Html;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -10,6 +11,7 @@ import org.json.JSONTokener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class BlogPostParser {
@@ -17,6 +19,7 @@ public class BlogPostParser {
     public ArrayList<BlogPost> posts;
 
     private BlogPostParser()  {
+        posts = new ArrayList<BlogPost>();
 
     }
 
@@ -27,37 +30,46 @@ public class BlogPostParser {
         return parser;
     }
 
-    public JSONObject prase(InputStream inputStream) {
-        BufferedReader reader = BufferedReader(new InputStream(inputStream));
+    public JSONObject parse(InputStream inputStream) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         StringBuilder builder = new StringBuilder();
         JSONObject jsonObject = null;
 
         String line;
 
-     try {
-         while (line = (reader.readLine()) != null) {
-             builder.append(line);
-         }
-         JSONTokener jsonTokener = new JSONTokener(builder.toString());
-         jsonObject = new JSONObject(JSONTokener);
+        try {
+            while ((line = reader.readLine()) != null) {
+                builder.append(line);
+        }
+        JSONTokener jsonTokener = new JSONTokener(builder.toString());
+        jsonObject = new JSONObject(JSONTokener);
 
 
-             String title = Html.fromHtml(post.getString()"title")).toString();
-         }
-
-     }
-     catch(IOException error) {
-         Log.e("BlogPostParcer", "IOException:" + error);
-     }
+        String title = Html.fromHtml(post.title).toString();
+        }
+        catch(IOException error) {
+            Log.e("BlogPostParcer", "IOException:" + error);
+        }
         catch(JSONException error) {
-        Log.e("BlogPostParcer", "JSON Exception: " + error);
-    }
+            Log.e("BlogPostParcer", "JSON Exception: " + error);
+        }
 
 
         return jsonObject;
     }
 
-        public void readFeed(JSONObject jsonObject) {
+    public void readFeed(JSONObject jsonObject) {
+        JSONArray jsonPosts = jsonObject.getJSONArray("posts");
+             for(int index = 0; index < jsonPosts.length(); index++) {
+                 JSONObject post = jsonPosts.getJSONObject(index);
 
+                 String title = post.getString("title");
+                 String url = post.getString("url");
+
+                 BlogPost blogPost = new BlogPost(title,url);
+             }
+        }
+        catch (JSONException error){
+                Log.e("BlogPostParser","JSONException:"+error);
         }
 }
