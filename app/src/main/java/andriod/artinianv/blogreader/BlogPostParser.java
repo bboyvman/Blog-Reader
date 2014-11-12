@@ -18,7 +18,7 @@ public class BlogPostParser {
     private static BlogPostParser parser;
     public ArrayList<BlogPost> posts;
 
-    private BlogPostParser()  {
+    private BlogPostParser() {
         posts = new ArrayList<BlogPost>();
 
     }
@@ -40,17 +40,13 @@ public class BlogPostParser {
         try {
             while ((line = reader.readLine()) != null) {
                 builder.append(line);
-        }
-        JSONTokener jsonTokener = new JSONTokener(builder.toString());
-        jsonObject = new JSONObject(JSONTokener);
+            }
+            JSONTokener jsonTokener = new JSONTokener(builder.toString());
+            jsonObject = new JSONObject(jsonTokener);
 
-
-        String title = Html.fromHtml(post.title).toString();
-        }
-        catch(IOException error) {
+        } catch (IOException error) {
             Log.e("BlogPostParcer", "IOException:" + error);
-        }
-        catch(JSONException error) {
+        } catch (JSONException error) {
             Log.e("BlogPostParcer", "JSON Exception: " + error);
         }
 
@@ -59,17 +55,18 @@ public class BlogPostParser {
     }
 
     public void readFeed(JSONObject jsonObject) {
-        JSONArray jsonPosts = jsonObject.getJSONArray("posts");
-             for(int index = 0; index < jsonPosts.length(); index++) {
-                 JSONObject post = jsonPosts.getJSONObject(index);
+        try {
+            JSONArray jsonPosts = jsonObject.getJSONArray("posts");
+            for (int index = 0; index < jsonPosts.length(); index++) {
+                JSONObject post = jsonPosts.getJSONObject(index);
 
-                 String title = post.getString("title");
-                 String url = post.getString("url");
+                String title = post.getString("title");
+                String url = post.getString("url");
 
-                 BlogPost blogPost = new BlogPost(title,url);
-             }
+                BlogPost blogPost = new BlogPost(title, url);
+            }
+        } catch (JSONException error) {
+            Log.e("BlogPostParser", "JSONException:" + error);
         }
-        catch (JSONException error){
-                Log.e("BlogPostParser","JSONException:"+error);
-        }
+    }
 }
